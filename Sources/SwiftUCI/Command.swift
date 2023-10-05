@@ -6,8 +6,6 @@
 //
 
 public enum Command {
-    public typealias Move = String
-    
     // MARK: - GUI to Engine
     
     case uci
