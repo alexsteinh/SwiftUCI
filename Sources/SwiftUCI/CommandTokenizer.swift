@@ -1,10 +1,3 @@
-//
-//  CommandTokenizer.swift
-//
-//
-//  Created by Alexander Steinhauer on 06.10.23.
-//
-
 final class CommandTokenizer {
     private let tokens: [String]
     private var index: Array.Index

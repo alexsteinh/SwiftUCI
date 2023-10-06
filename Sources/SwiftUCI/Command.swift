@@ -1,10 +1,3 @@
-//
-//  Command.swift
-//
-//
-//  Created by Alexander Steinhauer on 05.10.23.
-//
-
 import Foundation
 
 public enum Command: Equatable {

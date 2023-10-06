@@ -1,10 +1,3 @@
-//
-//  CommandTests.swift
-//
-//
-//  Created by Alexander Steinhauer on 06.10.23.
-//
-
 import XCTest
 @testable import SwiftUCI
 
