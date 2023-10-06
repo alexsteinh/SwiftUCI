@@ -16,3 +16,9 @@ public struct Move: Hashable {
         self.promoted = promoted
     }
 }
+
+extension Move: CustomStringConvertible {
+    public var description: String {
+        "\(from)\(to)\(promoted ? "q" : "")"
+    }
+}
