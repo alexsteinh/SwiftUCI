@@ -18,14 +18,12 @@ extension Move: CustomStringConvertible {
 
 extension Move {
     init?(string: String) {
-        let trimmedString = string.trimmingCharacters(in: .whitespacesAndNewlines)
-        
         // Handle special nullmove
-        if trimmedString == "0000" {
+        if string == "0000" {
             self.init(from: "00", to: "00", promotion: nil)
         }
         
-        guard let (_, from, to, promotion) = trimmedString.wholeMatch(of: /([a-h][1-8])([a-h][1-8])(q|r|b|n)?/)?.output else {
+        guard let (_, from, to, promotion) = string.wholeMatch(of: /([a-h][1-8])([a-h][1-8])(q|r|b|n)?/)?.output else {
             return nil
         }
         
