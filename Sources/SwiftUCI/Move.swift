@@ -21,6 +21,7 @@ extension Move {
         // Handle special nullmove
         if string == "0000" {
             self.init(from: "00", to: "00", promotion: nil)
+            return
         }
         
         guard let (_, from, to, promotion) = string.wholeMatch(of: /([a-h][1-8])([a-h][1-8])(q|r|b|n)?/)?.output else {
