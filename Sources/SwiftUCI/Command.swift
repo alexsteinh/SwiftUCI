@@ -1,5 +1,3 @@
-import Foundation
-
 public enum Command: Equatable {
     // MARK: - GUI to Engine
     
