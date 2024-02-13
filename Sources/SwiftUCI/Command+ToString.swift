@@ -39,9 +39,11 @@ extension Command: CustomStringConvertible {
                     break
                 }
                 
-                $0 += buildString(" moves") {
-                    for move in moves {
-                        $0 += " \(move)"
+                if !moves.isEmpty {
+                    $0 += buildString(" moves") {
+                        for move in moves {
+                            $0 += " \(move)"
+                        }
                     }
                 }
             }
@@ -182,7 +184,7 @@ extension Command: CustomStringConvertible {
                     case .spin(let `default`, let min, let max):
                         $0 += " spin default \(`default`) min \(min) max \(max)"
                     case .combo(let `default`, let vars):
-                        $0 += buildString(" check \(`default`)") {
+                        $0 += buildString(" combo default \(`default`)") {
                             for opt in vars {
                                 $0 += " var \(opt)"
                             }
