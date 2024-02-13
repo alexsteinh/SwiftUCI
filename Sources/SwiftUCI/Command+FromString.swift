@@ -11,34 +11,34 @@ public extension Command {
         switch tokenizer.nextString() {
         // GUI to Engine
         case "uci":
-            Command.uci
+            .uci
         case "debug":
             parseDebug(tokenizer: tokenizer)
         case "isready":
-            Command.isready
+            .isready
         case "setoption":
             parseSetoption(tokenizer: tokenizer)
         case "register":
             parseRegister(tokenizer: tokenizer)
         case "ucinewgame":
-            Command.ucinewgame
+            .ucinewgame
         case "position":
             parsePosition(tokenizer: tokenizer)
         case "go":
             parseGo(tokenizer: tokenizer)
         case "stop":
-            Command.stop
+            .stop
         case "ponderhit":
-            Command.ponderhit
+            .ponderhit
         case "quit":
-            Command.quit
+            .quit
         // Engine to GUI
         case "id":
             parseId(tokenizer: tokenizer)
         case "uciok":
-            Command.uciok
+            .uciok
         case "readyok":
-            Command.readyok
+            .readyok
         case "bestmove":
             parseBestmove(tokenizer: tokenizer)
         case "copyprotection":
@@ -57,9 +57,9 @@ public extension Command {
     private static func parseDebug(tokenizer: CommandTokenizer) -> Command? {
         switch tokenizer.nextString() {
         case "on":
-            Command.debug(true)
+            .debug(true)
         case "off":
-            Command.debug(false)
+            .debug(false)
         default:
             nil
         }
@@ -146,12 +146,12 @@ public extension Command {
             case "searchmoves":
                 var moves = [Move]()
                 
-                loop: while let string = tokenizer.nextString() {
+                while let string = tokenizer.nextString() {
                     if let move = Move(string: string) {
                         moves.append(move)
                     } else {
                         tokenizer.undo()
-                        break loop
+                        break
                     }
                 }
                 
@@ -207,9 +207,9 @@ public extension Command {
     private static func parseId(tokenizer: CommandTokenizer) -> Command? {
         switch tokenizer.nextString() {
         case "name":
-            Command.id(.name(tokenizer.remainingString))
+            .id(.name(tokenizer.remainingString))
         case "author":
-            Command.id(.author(tokenizer.remainingString))
+            .id(.author(tokenizer.remainingString))
         default:
             nil
         }
@@ -340,12 +340,12 @@ public extension Command {
                 if let move1 = tokenizer.nextString().flatMap(Move.init(string:)) {
                     var moves = [Move]()
                     
-                    loop: while let string = tokenizer.nextString() {
+                    while let string = tokenizer.nextString() {
                         if let move = Move(string: string) {
                             moves.append(move)
                         } else {
                             tokenizer.undo()
-                            break loop
+                            break
                         }
                     }
                     
