@@ -7,9 +7,32 @@ public extension Command {
         }
     }
     
-    // TODO: Implement for 'GUI to Engine' commands
     private static func parseCommand(tokenizer: CommandTokenizer) -> Command? {
         switch tokenizer.nextString() {
+        // GUI to Engine
+        case "uci":
+            Command.uci
+        case "debug":
+            parseDebug(tokenizer: tokenizer)
+        case "isready":
+            Command.isready
+        case "setoption":
+            parseSetoption(tokenizer: tokenizer)
+        case "register":
+            parseRegister(tokenizer: tokenizer)
+        case "ucinewgame":
+            Command.ucinewgame
+        case "position":
+            parsePosition(tokenizer: tokenizer)
+        case "go":
+            parseGo(tokenizer: tokenizer)
+        case "stop":
+            Command.stop
+        case "ponderhit":
+            Command.ponderhit
+        case "quit":
+            Command.quit
+        // Engine to GUI
         case "id":
             parseId(tokenizer: tokenizer)
         case "uciok":
@@ -29,6 +52,156 @@ public extension Command {
         default:
             nil
         }
+    }
+    
+    private static func parseDebug(tokenizer: CommandTokenizer) -> Command? {
+        switch tokenizer.nextString() {
+        case "on":
+            Command.debug(true)
+        case "off":
+            Command.debug(false)
+        default:
+            nil
+        }
+    }
+    
+    private static func parseSetoption(tokenizer: CommandTokenizer) -> Command? {
+        guard tokenizer.nextString() == "name" else {
+            return nil
+        }
+        
+        var nameTokens = [String]()
+        var value: String?
+        while let token = tokenizer.nextString() {
+            if token == "value" {
+                value = tokenizer.remainingString
+                break
+            }
+            
+            nameTokens.append(token)
+        }
+        
+        return .setoption(name: nameTokens.joined(separator: " "), value: value)
+    }
+    
+    private static func parseRegister(tokenizer: CommandTokenizer) -> Command? {
+        var arguments = Set<RegistrationArgument>()
+        
+        while let token = tokenizer.nextString() {
+            switch token {
+            case "later":
+                arguments.insert(.later)
+            case "name":
+                if let name = tokenizer.nextString() {
+                    arguments.insert(.name(name))
+                }
+            case "code":
+                if let code = tokenizer.nextString() {
+                    arguments.insert(.code(code))
+                }
+            default:
+                break
+            }
+        }
+        
+        return .register(arguments)
+    }
+    
+    private static func parsePosition(tokenizer: CommandTokenizer) -> Command? {
+        let position: PositionArgument?
+        switch tokenizer.nextString() {
+        case "fen":
+            if let fen = tokenizer.nextString() {
+                position = .fen(fen)
+            } else {
+                return nil
+            }
+        case "startpos":
+            position = .startpos
+        default:
+            return nil
+        }
+        
+        guard tokenizer.nextString() == "moves" else {
+            return .position(position, moves: [])
+        }
+        
+        var moves = [Move]()
+        while let token = tokenizer.nextString() {
+            if let move = Move(string: token) {
+                moves.append(move)
+            } else {
+                return nil
+            }
+        }
+        
+        return .position(position, moves: moves)
+    }
+    
+    private static func parseGo(tokenizer: CommandTokenizer) -> Command? {
+        var arguments = Set<GoArgument>()
+        
+        while let token = tokenizer.nextString() {
+            switch token {
+            case "searchmoves":
+                var moves = [Move]()
+                
+                loop: while let string = tokenizer.nextString() {
+                    if let move = Move(string: string) {
+                        moves.append(move)
+                    } else {
+                        tokenizer.undo()
+                        break loop
+                    }
+                }
+                
+                arguments.insert(.searchmoves(moves))
+            case "ponder":
+                arguments.insert(.ponder)
+            case "wtime":
+                if let int = tokenizer.nextInt() {
+                    arguments.insert(.wtime(int))
+                }
+            case "btime":
+                if let int = tokenizer.nextInt() {
+                    arguments.insert(.btime(int))
+                }
+            case "winc":
+                if let int = tokenizer.nextInt() {
+                    arguments.insert(.winc(int))
+                }
+            case "binc":
+                if let int = tokenizer.nextInt() {
+                    arguments.insert(.binc(int))
+                }
+            case "movestogo":
+                if let int = tokenizer.nextInt() {
+                    arguments.insert(.movestogo(int))
+                }
+            case "depth":
+                if let int = tokenizer.nextInt() {
+                    arguments.insert(.depth(int))
+                }
+            case "nodes":
+                if let int = tokenizer.nextInt() {
+                    arguments.insert(.nodes(int))
+                }
+            case "mate":
+                if let int = tokenizer.nextInt() {
+                    arguments.insert(.mate(int))
+                }
+            case "movetime":
+                if let int = tokenizer.nextInt() {
+                    arguments.insert(.movetime(int))
+                }
+            case "infinite":
+                arguments.insert(.infinite)
+            default:
+                break
+            }
+        }
+        
+        return .go(arguments)
     }
     
     private static func parseId(tokenizer: CommandTokenizer) -> Command? {
