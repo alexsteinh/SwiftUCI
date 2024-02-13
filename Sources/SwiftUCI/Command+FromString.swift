@@ -48,8 +48,8 @@ public extension Command {
         }
         
         let move2: Move?
-        if tokenizer.nextString() == "ponder" {
-            if let ponderMove = tokenizer.nextString().flatMap(Move.init(string:)) {
+        if let next = tokenizer.nextString() {
+            if next == "ponder", let ponderMove = tokenizer.nextString().flatMap(Move.init(string:)) {
                 move2 = ponderMove
             } else {
                 return nil
