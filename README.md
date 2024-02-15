@@ -1,5 +1,8 @@
 # SwiftUCI
 
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Falexsteinh%2FSwiftUCI%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/alexsteinh/SwiftUCI)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Falexsteinh%2FSwiftUCI%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/alexsteinh/SwiftUCI)
+
 A swifty way to parse and write Universal Chess Interface (UCI) commands.  
 Available from Swift 5.9.
 
